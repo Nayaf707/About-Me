@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login with Google</title>
+
+    <!-- ربط تنسيق CSS لتحسين مظهر الموقع -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #00bcd4, #8e24aa);
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .g-signin2 {
+            width: 100%;
+        }
+
+        button {
+            background-color: #ff3b30;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #d32f2f;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
+
+    <!-- ربط مكتبة Google API -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Login with Google</h1>
+
+        <!-- زر تسجيل الدخول عبر Google -->
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+        <p class="footer">Powered by Google OAuth</p>
+    </div>
+
+    <script>
+        function onSignIn(googleUser) {
+            // الحصول على الـ ID Token من Google
+            var id_token = googleUser.getAuthResponse().id_token;
+            console.log("ID Token: " + id_token);
+
+            // إرسال الـ ID Token إلى الخادم
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'your_backend_server_url', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    console.log('Login successful');
+                    window.location.href = 'dashboard.html'; // إعادة توجيه المستخدم للصفحة الرئيسية بعد تسجيل الدخول
+                } else {
+                    console.log('Login failed');
+                }
+            };
+            xhr.send('idtoken=' + id_token); // إرسال التوكن إلى الخادم
+        }
+    </script>
+
+</body>
+</html>
